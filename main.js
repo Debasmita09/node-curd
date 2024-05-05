@@ -1,15 +1,23 @@
+// import
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
-const { CLIENT_RENEG_LIMIT } = require("tls");
+// const { CLIENT_RENEG_LIMIT } = require("tls");
 
 const app = express();
-const PORT = process.env.PORT || 4000;
+// this port is coming from .env file
+const PORT = process.env.PORT || 4000;   
+
+// for testing
+// app.get('/', (req, res) => {
+//   res.send('Hello World');
+// });
 
 //database connection
 mongoose.connect(process.env.DB_URI, {
   useNewUrlParser: true,
+ 
   useUnifiedTopology: true,
 });
 const db = mongoose.connection;
@@ -26,16 +34,16 @@ app.use(
     resave: false,
   })
 );
-
+// storing session message middleware
 app.use((req, res, next) => {
   res.locals.message = req.session.message;
   delete req.session.message;
   next();
 });
 
-app.use(express.static("uploads"));
+// app.use(express.static("uploads"));
 
-//st template engine
+//set template engine from ejs
 app.set("view engine", "ejs");
 
 //route prefix
